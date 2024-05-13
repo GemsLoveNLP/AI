@@ -1,0 +1,71 @@
+//The state of the board is represented as a list [(x1,y1),(x2,y2),(x3,y3),(xw,yw)]
+//where each tuple is the address of the sheep or wolf
+
+adam = [a random list of tuples]
+eve = [another random list of tuples]
+
+//The population holds all the states of interest
+Population = [adam,eve, ...] //the number of genes within population is population_size
+
+//Algorithm
+
+fitness(gene): // check number of collision, the more this fitness the worse the individual
+    sum = 0
+    for i in range(3):
+        // check sheep collision
+        for j in range(i+1,3):
+            if abs(xi - xj) <= 2 or abs(yi - yj) <= 2:
+                sum += 1
+        // check wolf collision
+        if abs(xi - xw) <= 3 or abs(yi - yw) <= 3:
+            sum += 1
+        // check sheep out of bound
+        if xi <= 0 or xi >= BOARD_SIZE-1 or yi <= 0 or yi >= BOARD_SIZE-1:
+            sum += 1
+    // check wolf out of bound
+    if xw <= 1 or xw >= BOARD_SIZE-2 or yw <= 1 or yw >= BOARD_SIZE-2:
+        sum += 1
+    return sum
+
+sort(population):
+    // sort this population by utility ascendingly
+    return sorted_population
+
+mate(mom,dad):
+    children = []
+    for _ in range(population_size):
+        n = random number from 0 to 3
+        child = mom[:n] + dad[n:]
+        children.append(child)
+    return children
+
+mutate(child):
+    new_child = child.copy()
+    i = random number from 0 to 3 // change which piece
+    j = random number 0 or 1 //change x or y
+    if j == 0: //x
+        x = random number 0 to board_size-1
+        new_child[i][0] = x
+    else: //y
+        y = random number 0 to board_size-1
+        new_child[i][1] = y
+    return new_child
+
+while True:
+
+    sorted_pop = sort(population)
+
+    // select two best
+    mom = sorted_pop[0]
+    dad = sorted_pop[1]
+
+    //end game
+    if fitness(mom) == 0:
+        return mom
+
+    children = mate(mom,dad)
+    mutants = []
+    for _ in range(mutation_factor*population_size):
+        i = random number from 0 to population_size-1
+        children[i] = mutate(children[i])
+    population = children

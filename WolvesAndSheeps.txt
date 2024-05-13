@@ -1,0 +1,74 @@
+//The state of the board is represented as a list [(xs1,ys1),(xs2,ys2),...,(xw1,yw1),(xw2,yw2),...]
+//where each tuple is the address of the sheep or wolf
+
+adam = [a random list of tuples] (S sheeps and W wolves)
+eve = [another random list of tuples] (S sheeps and W wolves)
+
+//The population holds all the states of interest
+Population = [adam,eve, ...] //the number of genes within population is population_size
+
+//Algorithm
+
+fitness(gene): // check number of collision the more this fitness the worse the individual
+    sum = 0
+
+    // check number of duplicates in the list (sheeps or wolves that are on the exact same slot)
+    l = []
+    for g in gene:
+        if g in l:
+            sum += 1
+        else:
+            l.append(g)
+
+    // check sheep in wolf sight
+    for i in range(S): // for every sheeps
+        for j in range(W): // for every wolves
+            if xsi == xwj or ysi == ywj or |xsi - xwj| == |ysi - ywj|: // if it is in the same hor, ver, or diags
+                sum += 1 
+
+    return sum
+
+sort(population):
+    // sort this population by utility ascendingly
+    return sorted_population
+
+mate(mom,dad):
+    children = []
+    for _ in range(population_size):
+        n = random number from 0 to S + W - 1
+        child = mom[:n] + dad[n:]
+        children.append(child)
+    return children
+
+mutate(child):
+    new_child = child.copy()
+    i = random number from 0 to S + W - 1 // change which piece
+    j = random number 0 or 1 //change x or y
+    if j == 0: //x
+        x = random number 0 to board_size-1
+        new_child[i][0] = x
+    else: //y
+        y = random number 0 to board_size-1
+        new_child[i][1] = y
+    return new_child
+
+while True:
+    sorted_pop = sort(population)
+
+    // select two best
+    mom = sorted_pop[0]
+    dad = sorted_pop[1]
+
+    //end game
+    if fitness(mom) == 0:
+        return mom
+
+    children = mate(mom,dad)
+    mutants = []
+    for _ in range(mutation_factor*population_size):
+        i = random number from 0 to population_size-1
+        children[i] = mutate(children[i])
+    population = children
+
+    
+        

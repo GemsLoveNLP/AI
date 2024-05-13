@@ -1,0 +1,54 @@
+// boardsize
+BOARD_SIZE
+
+// list of obstacles (wall blocks)
+obstacles = [[x,y],...]
+
+// list of moves
+moves = [[row_move,col_move,action],...]
+moves = [[-1,0,u],[1,0,d],[0,-1,l],[0,1,r]]
+
+// goal
+goal = [row_goal,col_goal]
+
+// state
+class State:
+
+    def __init__(self,row,col,action,visit):
+        self.action = action // initialize as ""
+        self.visit = visit // initialize as {}
+        self.row = row
+        self.col = col
+
+    def utility(self):
+        if [row,col] == goal:
+            return 1
+        return 0
+
+    def gen_child(self):
+        children = []
+        for move in moves:
+            dest = [row + row_move, col + col_move]
+            if dest in board and dest not in obstacles and dest not in visit:
+                visit = self.visit
+                visit.add(dest)
+                children.append(State(dest_row,dest_col,self.action+action,visit))
+        return children
+
+    def bfs(self):
+        front = self
+        fringe = [self]
+        count = 0
+        while True:
+            if fringe is empty:
+                return front
+            front = fringe[0]
+            if fringe.utility == 1:
+                return front
+            fringe = fringe[1:] + front.gen_child()
+            
+
+            
+    
+
+    
